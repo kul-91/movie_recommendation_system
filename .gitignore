@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.env
+venv/
+
+.ipynb_checkpoints/
+
+*.pkl
+*.npy
+semantic_embeddings.npy
+
+*.csv
+
+node_modules/
+dist/.idea/

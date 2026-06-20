@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "autoprefixer": "^10.5.0",
+    "axios": "^1.17.0",
+    "postcss": "^8.5.15"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.3.0"
+  }
+}
