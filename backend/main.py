@@ -1,9 +1,34 @@
 from requests import request
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from huggingface_hub import hf_hub_download
 
+import os
 import pickle
 import requests
+
+HF_REPO = "kul-91/movie_recommendation_artifacts"
+
+def download_artifacts():
+    files = [
+        'movies_df.pkl',
+        'semantic_similarity.pkl',
+        'temp_df.pkl',
+        'tfidf_similarity.pkl'
+    ]
+    for file in files:
+        if not os.path.exists(file):
+            print(f"Downloading {file}...")
+            hf_hub_download(
+                repo_id=HF_REPO,
+                filename=file,
+                repo_type="dataset",
+                local_dir=".",         # saves in current directory
+            )
+            print(f"{file} ready")
+
+download_artifacts()
+
 
 app = FastAPI()
 
