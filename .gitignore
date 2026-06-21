@@ -3,6 +3,7 @@ __pycache__/
 .env
 venv/
 
+.mvenv
 .ipynb_checkpoints/
 
 *.pkl
