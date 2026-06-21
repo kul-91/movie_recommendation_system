@@ -1,5 +1,6 @@
-const express = require('express');
-const axios = require('axios');
+import express from "express";
+import axios from "axios";
+
 const app = express();
 
 app.get('/api/recommendations', async (req, res) => {
