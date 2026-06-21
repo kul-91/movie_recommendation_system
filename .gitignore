@@ -15,3 +15,5 @@ semantic_embeddings.npy
 node_modules/
 dist/.idea/
 .idea
+
+/backend/node_modules/
