@@ -17,3 +17,4 @@ dist/.idea/
 .idea
 
 /backend/node_modules/
+.cache

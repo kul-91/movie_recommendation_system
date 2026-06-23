@@ -6,5 +6,25 @@
   },
   "devDependencies": {
     "tailwindcss": "^4.3.0"
-  }
+  },
+  "name": "movie-recommender",
+  "version": "1.0.0",
+  "description": "A full-stack movie recommendation system built with a hybrid ML approach combining TF-IDF vectorization and Sentence Transformers (all-MiniLM-L6-v2) for semantic similarity, weighted with Bayesian ratings and popularity scoring. Features a React + Tailwind CSS ..",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kul-91/movie_recommendation_system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kul-91/movie_recommendation_system/issues"
+  },
+  "homepage": "https://github.com/kul-91/movie_recommendation_system#readme"
 }
