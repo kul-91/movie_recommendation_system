@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
+import { axiosInstance } from "../lib/axios.js";
 
-function HomePage() {
+
+const HomePage = () => {
     const [moviesList, setMoviesList] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
     const [suggestions, setSuggestions] = useState([]);
@@ -49,24 +51,16 @@ function HomePage() {
     const handleRecommend = async (titleToSearch) => {
         const queryTitle = titleToSearch || searchTerm;
         if (!queryTitle.trim()) return;
-
         setLoading(true);
         setError("");
         setRecommendations(null);
         setShowDropdown(false);
-
         try {
-            const response = await fetch(
-                `http://localhost:8000/api/recommend?movie_title=${encodeURIComponent(
-                    queryTitle
-                )}`
-            );
-            if (!response.ok) {
-                throw new Error("Movie not found or server error");
-            }
 
-            const data = await response.json(); // { searched_movie: {...}, recommendations: [[titles], [posters]] }
-
+            const response = await axiosInstance.get(`/recommendations`, {
+                params: { movie_title: queryTitle }
+            });
+            const data = response.data; // { searched_movie: {...}, recommendations: [[titles], [posters]] }
             if (data && data.recommendations && data.recommendations.length > 0) {
                 setRecommendations({
                     searched: data.searched_movie,
@@ -76,14 +70,15 @@ function HomePage() {
                 setError("No recommendation found.");
             }
         } catch (err) {
-            setError(err.message || "Failed to fetch recommendations");
+            // Display error sent from our Node.js server
+            setError(err.response?.data?.message || "Failed to fetch recommendations");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-zinc-950 text-slate-100 px-6 py-12 flex flex-col items-center">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-zinc-950 text-slate-100 px-6 pt-24 pb-12 flex flex-col items-center">
             {/* Header */}
             <header className="text-center mb-12">
                 <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent mb-3">
@@ -235,4 +230,4 @@ function HomePage() {
         </div>
     );
 }
-export default App;
+export default HomePage;
