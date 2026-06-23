@@ -8,8 +8,13 @@ export const signup = async (req, res) => {
     try {
         if (!fullName || !email || !password) return res.status(400).json({ message: "All details must be filled" });
 
+        const emailRegex = /^\S+@\S+\.\S+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: "Invalid email format" });
+        }
+
         if (password.length < 8) {
-            return res.status(400).json({ message: "Password must be at least 8 charaacters" });
+            return res.status(400).json({ message: "Password must be at least 8 characters" });
         }
 
         const user = await User.findOne({ email })
@@ -88,4 +93,4 @@ export const checkAuth = async (req, res) => {
         console.log("error in checkAuth controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};

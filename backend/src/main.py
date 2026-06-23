@@ -1,20 +1,27 @@
 from requests import request
+# pyrefly: ignore [missing-import]
 from fastapi import FastAPI, HTTPException
+# pyrefly: ignore [missing-import]
 from fastapi.middleware.cors import CORSMiddleware
+# pyrefly: ignore [missing-import]
 from huggingface_hub import hf_hub_download
+# pyrefly: ignore [missing-import]
+from dotenv import load_dotenv
 
 import os
 import pickle
 import requests
 
+
+load_dotenv()
+
+HF_TOKEN = os.environ.get("HF_TOKEN")
 HF_REPO = "kul-91/movie_recommendation_artifacts"
 
 def download_artifacts():
     files = [
         'movies_df.pkl',
-        'semantic_similarity.pkl',
-        'temp_df.pkl',
-        'tfidf_similarity.pkl'
+        'similarity_matrix.pkl'
     ]
     for file in files:
         if not os.path.exists(file):
@@ -23,7 +30,8 @@ def download_artifacts():
                 repo_id=HF_REPO,
                 filename=file,
                 repo_type="dataset",
-                local_dir=".",         # saves in current directory
+                local_dir=".",     # saves in current directory
+                token=HF_TOKEN,
             )
             print(f"{file} ready")
 
@@ -41,15 +49,10 @@ app.add_middleware(
 )
 
 movies_df = pickle.load(open('movies_df.pkl', 'rb'))
-tfidf_similarity = pickle.load(open('tfidf_similarity.pkl', 'rb'))
-semantic_similarity = pickle.load(open('semantic_similarity.pkl', 'rb'))
-temp_df =  pickle.load(open('temp_df.pkl', 'rb'))
-
-similarity_matrix = 0.5*tfidf_similarity + 0.5*semantic_similarity
+similarity_matrix = pickle.load(open('similarity_matrix.pkl', 'rb'))
 
 movies_title = movies_df['title'].values
 
-print()
 
 @app.get("/api/movies")
 def get_movies():
@@ -68,7 +71,7 @@ def fetch_poster(movie_id):
             headers={
                 "User-Agent": "Mozilla/5.0"
             }
-        )
+        )   
 
         print("Status:", response.status_code)
 
@@ -94,7 +97,7 @@ def recommend(movie_title):
     try:
         movie_idx = movies_df[movies_df['title'] == movie_title].index[0]
         
-        distance = sorted(list(enumerate(similarity_matrix[movie_idx] + 0.01*temp_df['weighted_rate'] + 0.01*temp_df['popularity_scaled'])), reverse=True, key = lambda x: x[1])[1:6]
+        distance = sorted(list(enumerate(similarity_matrix[movie_idx] + 0.01*movies_df['weighted_rate'] + 0.01*movies_df['popularity_scaled'])), reverse=True, key = lambda x: x[1])[1:6]
 
         movies_id_list = []
         movies_list = []

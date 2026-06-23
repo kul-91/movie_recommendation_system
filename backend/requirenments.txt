@@ -1,0 +1,4 @@
+requests
+fastapi
+huggingface_hub
+dotenv
