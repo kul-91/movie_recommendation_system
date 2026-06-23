@@ -1,4 +1,9 @@
-requests
 fastapi
+uvicorn[standard]
+pandas
+numpy
+scikit-learn
 huggingface_hub
-dotenv
+python-dotenv
+requests
+pickle5
