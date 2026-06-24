@@ -17,6 +17,8 @@ load_dotenv()
 
 HF_TOKEN = os.environ.get("HF_TOKEN")
 HF_REPO = "kul-91/movie_recommendation_artifacts"
+FRONTEND_URL = os.environ.get("FRONTEND_URL")
+
 
 def download_artifacts():
     files = [
@@ -42,7 +44,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[FRONTEND_URL, "http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
