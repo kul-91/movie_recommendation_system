@@ -14,12 +14,9 @@ const HomePage = () => {
     const dropdownRef = useRef(null);
 
     useEffect(() => {
-        fetch("http://localhost:8000/api/movies").then((res) => {
-            if (!res.ok) throw new Error("Failed to fetch movie list");
-            return res.json();
-        })
-            .then((data) => setMoviesList(data))
-            .catch((err) => console.log(err))
+        axiosInstance.get("/movies")
+            .then((res) => setMoviesList(res.data))
+            .catch((err) => console.log(err));
     }, []);
 
     useEffect(() => {

@@ -36,6 +36,16 @@ app.get("/health", (req, res) => {
 // Auth Routes
 app.use("/api/auth", authRoutes);
 
+app.get('/api/movies', protectRoute, async (req, res) => {
+    try {
+        const response = await axios.get(`${PYTHON_API_URL}/api/movies`);
+        res.json(response.data);
+    } catch (error) {
+        console.error("Error fetching movies list:", error.message);
+        res.status(500).json({ message: "Failed to fetch movies" });
+    }
+});
+
 // Recommendation Route
 app.get('/api/recommendations', protectRoute, async (req, res) => {
     const movieTitle = req.query.movie_title;
