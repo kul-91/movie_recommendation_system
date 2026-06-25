@@ -19,6 +19,8 @@ HF_TOKEN = os.environ.get("HF_TOKEN")
 HF_REPO = "kul-91/movie_recommendation_artifacts"
 FRONTEND_URL = os.environ.get("FRONTEND_URL")
 
+movies_df = None
+similarity_matrix = None
 
 def download_artifacts():
     files = [
@@ -37,7 +39,12 @@ def download_artifacts():
             )
             print(f"{file} ready")
 
-download_artifacts()
+def load_artifacts():
+    global movies_df, similarity_matrix
+    movies_df = pickle.load(open('movies_df.pkl', 'rb'))
+    similarity_matrix = pickle.load(open('similarity_matrix.pkl', 'rb'))
+    print("Artifacts loaded")
+
 
 
 app = FastAPI()
@@ -50,8 +57,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-movies_df = pickle.load(open('movies_df.pkl', 'rb'))
-similarity_matrix = pickle.load(open('similarity_matrix.pkl', 'rb'))
+
+@app.on_event("startup")
+async def startup_event():
+    download_artifacts()
+    load_artifacts()
 
 movies_title = movies_df['title'].values
 
