@@ -41,7 +41,7 @@ def download_artifacts():
             print(f"{file} ready")
 
 def load_artifacts():
-    global movies_df, similarity_matrix
+    global movies_df, similarity_matrix, movies_title
     movies_df = pickle.load(open('movies_df.pkl', 'rb'))
     similarity_matrix = pickle.load(open('similarity_matrix.pkl', 'rb'))
     movies_title = movies_df['title'].values
