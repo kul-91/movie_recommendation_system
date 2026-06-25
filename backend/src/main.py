@@ -65,6 +65,11 @@ async def startup_event():
     download_artifacts()
     load_artifacts()
 
+@app.get("/api/health")
+def health():
+    return {
+        "status": "ready" if movies_df is not None else "loading"
+    }
 
 @app.get("/api/movies")
 def get_movies():
