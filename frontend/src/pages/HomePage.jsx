@@ -15,18 +15,17 @@ const HomePage = () => {
 
     const [serviceReady, setServiceReady] = useState(false);
 
-    // Poll health endpoint until service is ready
     useEffect(() => {
         const checkHealth = async () => {
             try {
                 const res = await axiosInstance.get("/health");
                 if (res.data.status === "ready") {
-                    setServiceReady(true);  // triggers next useEffect
+                    setServiceReady(true);
                 } else {
-                    setTimeout(checkHealth, 3000);  // retry after 3 seconds
+                    setTimeout(checkHealth, 3000);
                 }
             } catch (err) {
-                setTimeout(checkHealth, 3000);  // retry on error too
+                setTimeout(checkHealth, 3000);
             }
         };
         checkHealth();
@@ -39,7 +38,7 @@ const HomePage = () => {
         axiosInstance.get("/movies")
             .then((res) => setMoviesList(res.data))
             .catch((err) => console.log(err));
-    }, []);
+    }, [serviceReady]);
 
     useEffect(() => {
         if (!searchTerm.trim()) {

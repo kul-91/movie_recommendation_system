@@ -29,8 +29,13 @@ app.use(cors({
 
 const PYTHON_API_URL = process.env.PYTHON_API_URL || "http://127.0.0.1:8000";
 
-app.get("/health", (req, res) => {
-    res.status(200).json({ status: "ok" });
+app.get("api//health", async (req, res) => {
+    try {
+        const response = await axios.get(`${PYTHON_API_URL}/api/health`);
+        res.json(response.data);
+    } catch (error) {
+        res.status(503).json({ status: "loading" });
+    }
 });
 
 // Auth Routes
