@@ -21,6 +21,7 @@ FRONTEND_URL = os.environ.get("FRONTEND_URL")
 
 movies_df = None
 similarity_matrix = None
+movies_title = None
 
 def download_artifacts():
     files = [
@@ -43,6 +44,7 @@ def load_artifacts():
     global movies_df, similarity_matrix
     movies_df = pickle.load(open('movies_df.pkl', 'rb'))
     similarity_matrix = pickle.load(open('similarity_matrix.pkl', 'rb'))
+    movies_title = movies_df['title'].values
     print("Artifacts loaded")
 
 
@@ -62,8 +64,6 @@ app.add_middleware(
 async def startup_event():
     download_artifacts()
     load_artifacts()
-
-movies_title = movies_df['title'].values
 
 
 @app.get("/api/movies")
